@@ -3,7 +3,7 @@ About r-brglm2
 
 Home: https://github.com/ikosmidis/brglm2
 
-Package license: GPL-3
+Package license: GPL-3.0-only
 
 Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/r-brglm2-feedstock/blob/master/LICENSE.txt)
 
