@@ -1,4 +1,4 @@
-{% set version = "0.7.1" %}
+{% set version = "0.8.1" %}
 {% set posix = 'm2-' if win else '' %}
 {% set native = 'm2w64-' if win else '' %}
 
@@ -10,7 +10,7 @@ source:
   url:
     - {{ cran_mirror }}/src/contrib/brglm2_{{ version }}.tar.gz
     - {{ cran_mirror }}/src/contrib/Archive/brglm2/brglm2_{{ version }}.tar.gz
-  sha256: 61f197cfc07641bf704d4c85eda88c2f19b81767831a1a702c212ae29d07a140
+  sha256: fc5532320bbf00c7487cc8a182362f6db161d7314e0b7d184d74389e8edb0bff
 
 build:
   merge_build_host: true  # [win]
@@ -21,6 +21,12 @@ build:
 
 requirements:
   build:
+    - {{ compiler('c') }}              # [not win]
+    - {{ compiler('m2w64_c') }}        # [win]
+    - {{ posix }}filesystem        # [win]
+    - {{ posix }}make
+    - {{ posix }}sed               # [win]
+    - {{ posix }}coreutils         # [win]
     - {{ posix }}zip               # [win]
   host:
     - r-base
@@ -32,6 +38,7 @@ requirements:
     - r-numderiv
   run:
     - r-base
+    - {{ native }}gcc-libs         # [win]
     - r-mass
     - r-matrix
     - r-enrichwith
@@ -47,14 +54,27 @@ test:
 about:
   home: https://github.com/ikosmidis/brglm2
   license: GPL-3.0-only
-  summary: Estimation and inference from generalized linear models based on various methods for bias reduction and maximum penalized likelihood with powers of the Jeffreys prior as penalty. The 'brglmFit' fitting method can achieve reduction of estimation bias by solving either the mean bias-reducing adjusted score equations
-    in Firth (1993) <doi:10.1093/biomet/80.1.27> and Kosmidis and Firth (2009) <doi:10.1093/biomet/asp055>, or the median bias-reduction adjusted score equations in Kenne et al. (2016) <arXiv:1604.04768>, or through the direct subtraction of an estimate of the bias of the maximum likelihood estimator from the maximum likelihood
-    estimates as in Cordeiro and McCullagh (1991) <http://www.jstor.org/stable/2345592>. See Kosmidis et al (2019) <doi:10.1007/s11222-019-09860-6> for more details. Estimation in all cases takes place via a quasi Fisher scoring algorithm, and S3 methods for the construction of of confidence intervals for the reduced-bias
-    estimates are provided. In the special case of generalized linear models for binomial and multinomial responses (both ordinal and nominal), the adjusted score approaches return estimates with improved frequentist properties, that are also always finite, even in cases where the maximum likelihood estimates are infinite
-    (e.g. complete and quasi-complete separation). 'brglm2' also provides pre-fit and post-fit methods for detecting separation and infinite maximum likelihood estimates in binomial response generalized linear models.
+  summary: Estimation and inference from generalized linear models based on various methods for
+    bias reduction and maximum penalized likelihood with powers of the Jeffreys prior
+    as penalty. The 'brglmFit' fitting method can achieve reduction of estimation bias
+    by solving either the mean bias-reducing adjusted score equations in Firth (1993)
+    <doi:10.1093/biomet/80.1.27> and Kosmidis and Firth (2009) <doi:10.1093/biomet/asp055>,
+    or the median bias-reduction adjusted score equations in Kenne et al. (2017) <doi:10.1093/biomet/asx046>,
+    or through the direct subtraction of an estimate of the bias of the maximum likelihood
+    estimator from the maximum likelihood estimates as in Cordeiro and McCullagh (1991)
+    <https://www.jstor.org/stable/2345592>. See Kosmidis et al (2020) <doi:10.1007/s11222-019-09860-6>
+    for more details. Estimation in all cases takes place via a quasi Fisher scoring
+    algorithm, and S3 methods for the construction of of confidence intervals for the
+    reduced-bias estimates are provided. In the special case of generalized linear models
+    for binomial and multinomial responses (both ordinal and nominal), the adjusted
+    score approaches to mean and media bias reduction have been found to return estimates
+    with improved frequentist properties, that are also always finite, even in cases
+    where the maximum likelihood estimates are infinite (e.g. complete and quasi-complete
+    separation; see Kosmidis and Firth, 2020 <doi:10.1093/biomet/asaa052>, for a proof
+    for mean bias reduction in logistic regression).
   license_family: GPL3
   license_file:
-    - {{ environ["PREFIX"] }}/lib/R/share/licenses/GPL-3
+    - '{{ environ["PREFIX"] }}/lib/R/share/licenses/GPL-3'
 
 extra:
   recipe-maintainers:
@@ -63,22 +83,22 @@ extra:
 
 # Package: brglm2
 # Title: Bias Reduction in Generalized Linear Models
-# Version: 0.6.0
-# Authors@R: c(person(given = "Ioannis", family = "Kosmidis", role = c("aut", "cre"), email = "ioannis.kosmidis@warwick.ac.uk", comment = c(ORCID = "0000-0003-1556-0302")), person(given = "Kjell", family = "Konis", role = "ctb", email = "kjell.konis@me.com"), person(given = c("Euloge", "Clovis"), family = c("Kenne Pagui"), role = "ctb", email = "kenne@stat.unipd.it"), person(given = "Nicola", family = "Sartori", role = "ctb", email = "sartori@stat.unipd.it"))
-# Description: Estimation and inference from generalized linear models based on various methods for bias reduction and maximum penalized likelihood with powers of the Jeffreys prior as penalty. The 'brglmFit' fitting method can achieve reduction of estimation bias by solving either the mean bias-reducing adjusted score equations in Firth (1993) <doi:10.1093/biomet/80.1.27> and Kosmidis and Firth (2009) <doi:10.1093/biomet/asp055>, or the median bias-reduction adjusted score equations in Kenne et al. (2016) <arXiv:1604.04768>, or through the direct subtraction of an estimate of the bias of the maximum likelihood estimator from the maximum likelihood estimates as in Cordeiro and McCullagh (1991) <http://www.jstor.org/stable/2345592>. See Kosmidis et al (2019) <doi:10.1007/s11222-019-09860-6> for more details. Estimation in all cases takes place via a quasi Fisher scoring algorithm, and S3 methods for the construction of of confidence intervals for the reduced-bias estimates are provided. In the special case of generalized linear models for binomial and multinomial responses (both ordinal and nominal), the adjusted score approaches return estimates with improved frequentist properties, that are also always finite, even in cases where the maximum likelihood estimates are infinite (e.g. complete and quasi-complete separation). 'brglm2' also provides pre-fit and post-fit methods for detecting separation and infinite maximum likelihood estimates in binomial response generalized linear models.
+# Version: 0.8.1
+# Authors@R: c(person(given = "Ioannis", family = "Kosmidis", role = c("aut", "cre"), email = "ioannis.kosmidis@warwick.ac.uk", comment = c(ORCID = "0000-0003-1556-0302")), person(given = c("Euloge", "Clovis"), family = c("Kenne Pagui"), role = "aut", email = "kenne@stat.unipd.it"), person(given = "Kjell", family = "Konis", role = "ctb", email = "kjell.konis@me.com"), person(given = "Nicola", family = "Sartori", role = "ctb", email = "sartori@stat.unipd.it"))
+# Description: Estimation and inference from generalized linear models based on various methods for bias reduction and maximum penalized likelihood with powers of the Jeffreys prior as penalty. The 'brglmFit' fitting method can achieve reduction of estimation bias by solving either the mean bias-reducing adjusted score equations in Firth (1993) <doi:10.1093/biomet/80.1.27> and Kosmidis and Firth (2009) <doi:10.1093/biomet/asp055>, or the median bias-reduction adjusted score equations in Kenne et al. (2017) <doi:10.1093/biomet/asx046>, or through the direct subtraction of an estimate of the bias of the maximum likelihood estimator from the maximum likelihood estimates as in Cordeiro and McCullagh (1991) <https://www.jstor.org/stable/2345592>. See Kosmidis et al (2020) <doi:10.1007/s11222-019-09860-6> for more details. Estimation in all cases takes place via a quasi Fisher scoring algorithm, and S3 methods for the construction of of confidence intervals for the reduced-bias estimates are provided. In the special case of generalized linear models for binomial and multinomial responses (both ordinal and nominal), the adjusted score approaches to mean and media bias reduction have been found to return estimates with improved frequentist properties, that are also always finite, even in cases where the maximum likelihood estimates are infinite (e.g. complete and quasi-complete separation; see Kosmidis and Firth, 2020 <doi:10.1093/biomet/asaa052>, for a proof for mean bias reduction in logistic regression).
 # URL: https://github.com/ikosmidis/brglm2
 # BugReports: https://github.com/ikosmidis/brglm2/issues
-# Depends: R (>= 3.3.0)
+# Depends: R (>= 3.5.0)
 # Imports: MASS, stats, Matrix, graphics, nnet, enrichwith, lpSolveAPI, numDeriv
 # License: GPL-3
 # Encoding: UTF-8
 # LazyData: true
-# RoxygenNote: 6.1.1
-# Suggests: testthat, knitr, rmarkdown, covr
+# RoxygenNote: 7.1.1
+# Suggests: detectseparation, testthat, knitr, rmarkdown, covr
 # VignetteBuilder: knitr
 # NeedsCompilation: yes
-# Packaged: 2019-11-08 11:13:06 UTC; yiannis
-# Author: Ioannis Kosmidis [aut, cre] (<https://orcid.org/0000-0003-1556-0302>), Kjell Konis [ctb], Euloge Clovis Kenne Pagui [ctb], Nicola Sartori [ctb]
+# Packaged: 2021-09-27 06:00:16 UTC; yiannis
+# Author: Ioannis Kosmidis [aut, cre] (<https://orcid.org/0000-0003-1556-0302>), Euloge Clovis Kenne Pagui [aut], Kjell Konis [ctb], Nicola Sartori [ctb]
 # Maintainer: Ioannis Kosmidis <ioannis.kosmidis@warwick.ac.uk>
 # Repository: CRAN
-# Date/Publication: 2019-11-08 12:00:05 UTC
+# Date/Publication: 2021-09-27 10:10:09 UTC
