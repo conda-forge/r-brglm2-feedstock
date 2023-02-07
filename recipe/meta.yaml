@@ -1,4 +1,4 @@
-{% set version = "0.8.2" %}
+{% set version = "0.9" %}
 {% set posix = 'm2-' if win else '' %}
 {% set native = 'm2w64-' if win else '' %}
 
@@ -10,11 +10,11 @@ source:
   url:
     - {{ cran_mirror }}/src/contrib/brglm2_{{ version }}.tar.gz
     - {{ cran_mirror }}/src/contrib/Archive/brglm2/brglm2_{{ version }}.tar.gz
-  sha256: 4eae58304ce081feb8c0bea9a6021cec5ccb2ecd455068e88d30aba7566db418
+  sha256: 260fbd748ce95b2f91cd21246f998534011e2f95da64d5f42c524cf4170512b1
 
 build:
   merge_build_host: true  # [win]
-  number: 1
+  number: 0
   rpaths:
     - lib/R/lib/
     - lib/
