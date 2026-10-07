@@ -1,4 +1,4 @@
-{% set version = "1.1.0" %}
+{% set version = "1.1.1" %}
 {% set posix = 'm2-' if win else '' %}
 
 package:
@@ -9,7 +9,7 @@ source:
   url:
     - {{ cran_mirror }}/src/contrib/brglm2_{{ version }}.tar.gz
     - {{ cran_mirror }}/src/contrib/Archive/brglm2/brglm2_{{ version }}.tar.gz
-  sha256: 687579d31ef9e222ce893393fe45eec3f45bda1bd22e2d5d0e9273783eed8e0a
+  sha256: f9b50e94d1394b4b16a06465cec2ed1848a299e428d48780bf89d1ec5d915513
 
 build:
   number: 0
